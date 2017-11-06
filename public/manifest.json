@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "uChat",
+  "name": "Simple chat app with socket.io & React",
   "icons": [
     {
       "src": "favicon.ico",
