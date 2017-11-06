@@ -19,7 +19,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const socket = io('http://localhost:3001');
+    const socket = io();
     this.setState(() => ({ socket }));
     // socket.on('connect', () => {
     //   console.log('connected');

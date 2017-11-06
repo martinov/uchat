@@ -28,5 +28,6 @@
   "repository": {
     "type": "git",
     "url": "git@gitlab.com:martinov/uchat.git"
-  }
+  },
+  "proxy": "http://localhost:3001/"
 }
