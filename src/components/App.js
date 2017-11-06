@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client';
 import PeopleList from './PeopleList';
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
@@ -11,16 +12,30 @@ class App extends Component {
     this.handleAddMessage = this.handleAddMessage.bind(this);
 
     this.state = {
+      socket: undefined,
       username: '',
       messages: []
     };
   }
 
+  componentDidMount() {
+    const socket = io('http://localhost:3001');
+    this.setState(() => ({ socket }));
+    // socket.on('connect', () => {
+    //   console.log('connected');
+    // });
+    socket.on('newMessage', (m) => {
+      //console.log('newMessage', m);
+      this.setState((prevState) => ({
+        messages: [...prevState.messages, m]
+      }));
+    });
+  }
+
   handleAddMessage(newMsg) {
-    this.setState(prevState => {
-      return {
-        messages: [...prevState.messages, newMsg]
-      };
+    this.state.socket.emit('createMessage', {
+      from: this.state.socket.id,
+      text: newMsg
     });
   }
 

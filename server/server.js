@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+const {generateMessage} = require('./message');
 
 let app = express();
 let server = http.createServer(app);
@@ -21,10 +22,22 @@ app.get('*', function(request, response) {
 });
 
 io.on('connection', (socket) => {
-    console.log(socket.id);
+    socket.emit(
+      'newMessage',
+      generateMessage('Admin', 'Welcome to the uChat app!')
+    );
 
-    socket.on('disconnect', () => {
-        console.log('client disconnected');
+    socket.broadcast.emit(
+      'newMessage',
+      generateMessage('Admin', `New user (${socket.id}) joined the chat.`)
+    );
+
+    // socket.on('disconnect', () => {
+    //   console.log('client disconnected');
+    // });
+
+    socket.on('createMessage', (m) => {
+      io.emit('newMessage', generateMessage(m.from, m.text));
     });
 });
 
