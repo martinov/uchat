@@ -4,7 +4,6 @@ import MessageItem from './MessageItem';
 
 class MessageList extends React.Component {
   render() {
-    console.log(this.props.messages);
     return (
       <ol id="messages" className="chat__messages" ref="messageList">
         {this.props.messages.map(m => <MessageItem key={m.createdAt} msg={m} />)}
