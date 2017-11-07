@@ -1,3 +1,5 @@
+You can see a [demo here](https://uchat-42.herokuapp.com/).
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 To run the React app for development, use npm run dev (instead of npm start).
