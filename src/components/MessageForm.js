@@ -7,7 +7,6 @@ class MessageForm extends React.Component {
     this.handleMsgSubmit = this.handleMsgSubmit.bind(this);
 
     this.state = {
-      message: '',
       messages: []
     };
   }

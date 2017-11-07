@@ -21,24 +21,39 @@ app.get('*', function(request, response) {
   response.sendFile(path.resolve(publicPath, 'index.html'));
 });
 
+let userList = {};
+
 io.on('connection', (socket) => {
+  let socketId = socket.id;
+
+  socket.on('enter', (info) => {
+    userList[socketId] = info;
+    socket.emit('uid', socketId);
+    socket.broadcast.emit('enterUser', userList[socketId].username);
+    io.emit('updateUserList', userList);
+    /*
     socket.emit(
       'newMessage',
       generateMessage('Admin', 'Welcome to the uChat app!')
     );
-
     socket.broadcast.emit(
       'newMessage',
       generateMessage('Admin', `New user (${socket.id}) joined the chat.`)
     );
+    */
+  });
 
-    // socket.on('disconnect', () => {
-    //   console.log('client disconnected');
-    // });
+  socket.on('createMessage', (m) => {
+    io.emit('newMessage', generateMessage(m.from, m.text));
+  });
 
-    socket.on('createMessage', (m) => {
-      io.emit('newMessage', generateMessage(m.from, m.text));
-    });
+  socket.on('disconnect', () => {
+    if (userList.hasOwnProperty(socketId)) {
+      socket.broadcast.emit('leaveUser', userList[socketId].username);
+      delete userList[socketId];
+    }
+    socket.broadcast.emit("updateUserList", userList);
+  });
 });
 
 const PORT = process.env.PORT || 3001;
