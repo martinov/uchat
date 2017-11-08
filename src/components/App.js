@@ -13,31 +13,42 @@ class App extends Component {
     this.handleAddMessage = this.handleAddMessage.bind(this);
     this.handleSetUsername = this.handleSetUsername.bind(this);
 
+    this.socket = io();
+
     this.state = {
-      socket: io(),
       username: '',
       userList: [],
-      messages: []
+      messages: [],
+      typingUsers: [],
     };
   }
 
   componentDidMount() {
-    //this.state.socket.on('uid', console.log);
-    //this.state.socket.on('enterUser', console.log);
-    this.state.socket.on('updateUserList', (userList) => {
+    //this.socket.on('uid', console.log);
+    //this.socket.on('enterUser', console.log);
+    this.socket.on('updateUserList', (userList) => {
       this.setState(() => ({
         userList
       }));
     });
-    this.state.socket.on('newMessage', (m) => {
+    this.socket.on('newMessage', (m) => {
       this.setState((prevState) => ({
         messages: [...prevState.messages, m]
       }));
     });
+    this.socket.on('userIsTyping', (u) => {
+      this.setState((prevState) => {
+        let {userList} = prevState;
+        userList[u.socketId].isTyping = u.isTyping;
+        return ({
+          userList
+        });
+      });
+    });
   }
 
   handleAddMessage(newMsg) {
-    this.state.socket.emit('createMessage', {
+    this.socket.emit('createMessage', {
       from: this.state.username,
       text: newMsg
     });
@@ -45,7 +56,12 @@ class App extends Component {
 
   handleSetUsername(username) {
     this.setState(() => ({ username }));
-    this.state.socket.emit('enter', { username });
+    this.socket.emit('enter', { username });
+  }
+
+  handleIsTyping = (isTyping) => {
+    this.setState(() => ({ isTyping }));
+    this.socket.emit('isTyping', isTyping);
   }
 
   render() {
@@ -62,7 +78,10 @@ class App extends Component {
 
           <div className="chat__main">
             <MessageList messages={this.state.messages} />
-            <MessageForm handleAddMessage={this.handleAddMessage} />
+            <MessageForm
+              handleAddMessage={this.handleAddMessage}
+              handleIsTyping={this.handleIsTyping}
+            />
           </div>
         </div>
       );

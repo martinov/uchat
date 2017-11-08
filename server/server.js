@@ -11,10 +11,10 @@ let io = socketIO(server);
 const publicPath = path.join(__dirname, '../build');
 app.use(express.static(publicPath));
 
-app.get('/api', function (req, res) {
-  res.set('Content-Type', 'application/json');
-  res.send('{"message":"Hello from API!"}');
-});
+// app.get('/api', function (req, res) {
+//   res.set('Content-Type', 'application/json');
+//   res.send('{"message":"Hello from API!"}');
+// });
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {
@@ -52,7 +52,14 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('leaveUser', userList[socketId].username);
       delete userList[socketId];
     }
-    socket.broadcast.emit("updateUserList", userList);
+    socket.broadcast.emit('updateUserList', userList);
+  });
+
+  socket.on('isTyping', (isTyping) => {
+    socket.broadcast.emit('userIsTyping', {
+      socketId,
+      isTyping
+    });
   });
 });
 

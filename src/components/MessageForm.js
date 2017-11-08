@@ -6,8 +6,10 @@ class MessageForm extends React.Component {
 
     this.handleMsgSubmit = this.handleMsgSubmit.bind(this);
 
+    this.timeoutHandle = undefined;
+
     this.state = {
-      messages: []
+      isTyping: false,
     };
   }
 
@@ -18,7 +20,28 @@ class MessageForm extends React.Component {
     if (msg) {
       this.props.handleAddMessage(msg);
       e.target.elements.message.value = '';
+      this.typingTimeout();
     }
+  }
+
+  typingTimeout = () => {
+    // Timeout reached - maybe the user isn't typing anymore.
+    this.setState(() => ({ isTyping: false }));
+    this.props.handleIsTyping(false);
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      clearTimeout(this.timeoutHandle);
+      return;
+    }
+    if (this.state.isTyping === false) {
+      this.setState(() => ({ isTyping: true }));
+      this.props.handleIsTyping(true);
+    } else {
+      clearTimeout(this.timeoutHandle);
+    }
+    this.timeoutHandle = setTimeout(this.typingTimeout, 4000);
   }
 
   render() {
@@ -31,6 +54,7 @@ class MessageForm extends React.Component {
             placeholder="Message"
             autoFocus
             autoComplete="off"
+            onKeyPress={this.handleKeyPress}
           />
           <button>Send</button>
         </form>

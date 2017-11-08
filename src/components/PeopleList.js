@@ -6,14 +6,23 @@ class PeopleList extends React.Component {
     for (let key in this.props.userList) {
       peopleList.push({
         id: key,
-        username: this.props.userList[key].username
+        username: this.props.userList[key].username,
+        isTyping: this.props.userList[key].isTyping
       });
     }
     return (
       <div className="chat__sidebar">
         <h3>People</h3>
         <ul id="users">
-          { peopleList.map(p => <li key={p.id}>{p.username}</li>) }
+        {
+          peopleList.map(p => {
+            let liClasses = '';
+            if (p.isTyping) liClasses = 'active';
+            return (
+              <li key={p.id} className={liClasses}>{p.username}{p.isTyping && (<span>...</span>)}</li>
+            );
+          })
+        }
         </ul>
       </div>
     );
