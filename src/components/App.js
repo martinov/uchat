@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import SetNameForm from './SetNameForm';
-import PeopleList from './PeopleList';
+import ChatList from './ChatList';
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
 import './App.css';
@@ -74,7 +74,7 @@ class App extends Component {
     if (this.state.username) {
       renderEl = (
         <div className="chat">
-          <PeopleList userList={this.state.userList} />
+          <ChatList userList={this.state.userList} />
 
           <div className="chat__main">
             <MessageList messages={this.state.messages} />

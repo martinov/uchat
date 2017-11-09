@@ -1,6 +1,6 @@
 import React from 'react';
 
-class PeopleList extends React.Component {
+class ChatList extends React.Component {
   render() {
     let peopleList = [];
     for (let key in this.props.userList) {
@@ -12,6 +12,7 @@ class PeopleList extends React.Component {
     }
     return (
       <div className="chat__sidebar">
+        <h2 className="active">uChat</h2>
         <h3>People</h3>
         <ul id="users">
         {
@@ -29,4 +30,4 @@ class PeopleList extends React.Component {
   }
 }
 
-export default PeopleList;
+export default ChatList;
