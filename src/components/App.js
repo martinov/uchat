@@ -16,15 +16,18 @@ class App extends Component {
     this.socket = io();
 
     this.state = {
+      uid:      '',
       username: '',
       userList: [],
       messages: [],
-      typingUsers: [],
+      chatWith: 'mainChat'
     };
   }
 
   componentDidMount() {
-    //this.socket.on('uid', console.log);
+    this.socket.on('uid', (uid) => {
+      this.setState(() => ({ uid }));
+    });
     //this.socket.on('enterUser', console.log);
     this.socket.on('updateUserList', (userList) => {
       this.setState(() => ({
@@ -64,6 +67,11 @@ class App extends Component {
     this.socket.emit('isTyping', isTyping);
   }
 
+  handleSelectUser = (e) => {
+    let userId = e.target.dataset.userId;
+    this.setState(() => ({ chatWith: userId }));
+  }
+
   render() {
     let renderEl = (
       <SetNameForm
@@ -74,7 +82,12 @@ class App extends Component {
     if (this.state.username) {
       renderEl = (
         <div className="chat">
-          <ChatList userList={this.state.userList} />
+          <ChatList
+            uid={this.state.uid}
+            userList={this.state.userList}
+            chatWith={this.state.chatWith}
+            handleSelectUser={this.handleSelectUser}
+          />
 
           <div className="chat__main">
             <MessageList messages={this.state.messages} />

@@ -129,12 +129,13 @@ button:disabled {
 .chat__sidebar li {
   background: #e6eaee;
   padding: 10px;
+  cursor: pointer;
 }
 .chat__sidebar h2 {
   background: #e6eaee;
   border: 1px solid #e1e1e1;
   border-radius: 5px;
-  color: #e6eaee;
+  cursor: pointer;
   font-weight: 600;
   font-size: 1.75rem;
   margin: 10px;
@@ -143,6 +144,7 @@ button:disabled {
 }
 .chat__sidebar h2.active {
   color: blue;
+  cursor: default;
 }
 .chat__sidebar h3 {
   color: #e6eaee;
@@ -155,6 +157,14 @@ button:disabled {
   margin: 10px;
 }
 .chat__sidebar li.active {
+  color: blue;
+  cursor: default;
+  font-weight: bold;
+}
+.chat__sidebar li.me {
+  cursor: default;
+}
+.chat__sidebar li.is-typing {
   background-color: #6bcdd4;
 }
 .chat__main {
