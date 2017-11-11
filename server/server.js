@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const {generateMessage} = require('./message');
+const { generateMessage } = require('./message');
 
 let app = express();
 let server = http.createServer(app);
@@ -23,10 +23,10 @@ app.get('*', function(request, response) {
 
 let userList = {};
 
-io.on('connection', (socket) => {
+io.on('connection', socket => {
   let socketId = socket.id;
 
-  socket.on('enter', (info) => {
+  socket.on('enter', info => {
     userList[socketId] = info;
     socket.emit('uid', socketId);
     socket.broadcast.emit('enterUser', userList[socketId].username);
@@ -43,8 +43,14 @@ io.on('connection', (socket) => {
     */
   });
 
-  socket.on('createMessage', (m) => {
-    io.emit('newMessage', generateMessage(m.from, m.text));
+  socket.on('createMessage', ({ from, to: sendToSocketId, text }) => {
+    if (sendToSocketId === 'mainChat') {
+      io.emit('newMessage', generateMessage(from, sendToSocketId, text));
+    } else if (!!userList[sendToSocketId]) {
+      io
+        .to(sendToSocketId)
+        .emit('newMessage', generateMessage(from, sendToSocketId, text));
+    }
   });
 
   socket.on('disconnect', () => {
@@ -55,7 +61,7 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('updateUserList', userList);
   });
 
-  socket.on('isTyping', (isTyping) => {
+  socket.on('isTyping', isTyping => {
     socket.broadcast.emit('userIsTyping', {
       socketId,
       isTyping
@@ -65,5 +71,5 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-    console.log(`uChat is running on ${PORT}`);
+  console.log(`uChat is running on ${PORT}`);
 });

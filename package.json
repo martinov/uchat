@@ -12,7 +12,9 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-scripts": "1.0.14",
-    "socket.io": "^2.0.4"
+    "redux": "^3.7.2",
+    "socket.io": "^2.0.4",
+    "uuid": "^3.1.0"
   },
   "scripts": {
     "start": "node server/server.js",
@@ -27,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.com:martinov/uchat.git"
+    "url": "git@github.com:martinov/uchat.git"
   },
   "proxy": {
     "/socket.io": {

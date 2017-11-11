@@ -16,7 +16,7 @@ class App extends Component {
     this.socket = io();
 
     this.state = {
-      uid:      '',
+      uid: '',
       username: '',
       userList: [],
       messages: [],
@@ -25,27 +25,27 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.socket.on('uid', (uid) => {
+    this.socket.on('uid', uid => {
       this.setState(() => ({ uid }));
     });
     //this.socket.on('enterUser', console.log);
-    this.socket.on('updateUserList', (userList) => {
+    this.socket.on('updateUserList', userList => {
       this.setState(() => ({
         userList
       }));
     });
-    this.socket.on('newMessage', (m) => {
-      this.setState((prevState) => ({
+    this.socket.on('newMessage', m => {
+      this.setState(prevState => ({
         messages: [...prevState.messages, m]
       }));
     });
-    this.socket.on('userIsTyping', (u) => {
-      this.setState((prevState) => {
-        let {userList} = prevState;
+    this.socket.on('userIsTyping', u => {
+      this.setState(prevState => {
+        let { userList } = prevState;
         userList[u.socketId].isTyping = u.isTyping;
-        return ({
+        return {
           userList
-        });
+        };
       });
     });
   }
@@ -53,6 +53,7 @@ class App extends Component {
   handleAddMessage(newMsg) {
     this.socket.emit('createMessage', {
       from: this.state.username,
+      to: this.state.chatWith,
       text: newMsg
     });
   }
@@ -62,22 +63,19 @@ class App extends Component {
     this.socket.emit('enter', { username });
   }
 
-  handleIsTyping = (isTyping) => {
+  handleIsTyping = isTyping => {
     this.setState(() => ({ isTyping }));
     this.socket.emit('isTyping', isTyping);
-  }
+  };
 
-  handleSelectUser = (e) => {
+  handleSelectUser = e => {
     let userId = e.target.dataset.userId;
     this.setState(() => ({ chatWith: userId }));
-  }
+  };
 
   render() {
     let renderEl = (
-      <SetNameForm
-        { ...this.props }
-        handleSetUsername={this.handleSetUsername}
-      />
+      <SetNameForm {...this.props} handleSetUsername={this.handleSetUsername} />
     );
     if (this.state.username) {
       renderEl = (
@@ -99,9 +97,7 @@ class App extends Component {
         </div>
       );
     }
-    return (
-      renderEl
-    );
+    return renderEl;
   }
 }
 

@@ -4,16 +4,13 @@ class MessageForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleMsgSubmit = this.handleMsgSubmit.bind(this);
-
     this.timeoutHandle = undefined;
-
     this.state = {
-      isTyping: false,
+      isTyping: false
     };
   }
 
-  handleMsgSubmit(e) {
+  handleMsgSubmit = e => {
     e.preventDefault();
 
     const msg = e.target.elements.message.value.trim();
@@ -22,15 +19,15 @@ class MessageForm extends React.Component {
       e.target.elements.message.value = '';
       this.typingTimeout();
     }
-  }
+  };
 
   typingTimeout = () => {
     // Timeout reached - maybe the user isn't typing anymore.
     this.setState(() => ({ isTyping: false }));
     this.props.handleIsTyping(false);
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyPress = e => {
     if (e.key === 'Enter') {
       clearTimeout(this.timeoutHandle);
       return;
@@ -42,7 +39,7 @@ class MessageForm extends React.Component {
       clearTimeout(this.timeoutHandle);
     }
     this.timeoutHandle = setTimeout(this.typingTimeout, 4000);
-  }
+  };
 
   render() {
     return (
