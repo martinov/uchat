@@ -1,18 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { setUserName } from '../actions/user';
 
 class SetNameForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSetName = this.handleSetName.bind(this);
-  }
-
-  handleSetName(e) {
+  handleSetName = e => {
     e.preventDefault();
     const name = e.target.elements.username.value.trim();
     if (name) {
+      this.props.dispatch(setUserName(name));
       this.props.handleSetUsername(name);
     }
-  }
+  };
 
   render() {
     return (
@@ -35,4 +33,10 @@ class SetNameForm extends React.Component {
   }
 }
 
-export default SetNameForm;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapStateToProps)(SetNameForm);

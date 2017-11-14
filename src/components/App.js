@@ -10,9 +10,6 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.handleAddMessage = this.handleAddMessage.bind(this);
-    this.handleSetUsername = this.handleSetUsername.bind(this);
-
     this.socket = io();
 
     this.state = {
@@ -50,18 +47,18 @@ class App extends Component {
     });
   }
 
-  handleAddMessage(newMsg) {
+  handleAddMessage = newMsg => {
     this.socket.emit('createMessage', {
       from: this.state.username,
       to: this.state.chatWith,
       text: newMsg
     });
-  }
+  };
 
-  handleSetUsername(username) {
+  handleSetUsername = username => {
     this.setState(() => ({ username }));
     this.socket.emit('enter', { username });
-  }
+  };
 
   handleIsTyping = isTyping => {
     this.setState(() => ({ isTyping }));
