@@ -22,21 +22,15 @@ io.on('connection', socket => {
   let socketId = socket.id;
 
   socket.on('enter', (info, cb) => {
+    if (Object.keys(userList).find(
+      (key, index) => userList[key].username === info.username)
+    ) {
+      return cb({ error: 'Sorry but this name is already in use!' });
+    }
     userList[socketId] = info;
     // socket.broadcast.emit('enterUser', userList[socketId]);
     io.emit('updateUserList', userList);
-    socket.emit('uid', socketId);
-    // cb({ uid: socketId });
-    /*
-    socket.emit(
-      'newMessage',
-      generateMessage('Admin', 'Welcome to the uChat app!')
-    );
-    socket.broadcast.emit(
-      'newMessage',
-      generateMessage('Admin', `New user (${socket.id}) joined the chat.`)
-    );
-    */
+    cb({ uid: socketId });
   });
 
   socket.on('createMessage', ({ from, to: sendToSocketId, text }, cb) => {

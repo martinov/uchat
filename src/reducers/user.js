@@ -3,7 +3,8 @@
 const userReducerDefaultState = {
   uid: '',
   username: '',
-  userList: []
+  userList: [],
+  nameFormError: ''
 };
 
 export default (state = userReducerDefaultState, action) => {
@@ -17,6 +18,11 @@ export default (state = userReducerDefaultState, action) => {
       return {
         ...state,
         userList: action.userList
+      };
+    case 'SET_NAME_FORM_ERROR':
+      return {
+        ...state,
+        nameFormError: action.error
       };
     default:
       return state;

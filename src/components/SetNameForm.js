@@ -7,14 +7,11 @@ class SetNameForm extends React.Component {
     e.preventDefault();
     const name = e.target.elements.username.value.trim();
     if (name) {
+      // e.target.elements.enterBtn.disabled = true;
       this.props.setUserName(name);
-      e.target.elements.enterBtn.disabled = true;
     }
   };
 
-  /**
-   * @todo: Add onChange to input and tell the user if name is already in use
-   */
   render() {
     return (
       <div className="login-container">
@@ -30,14 +27,19 @@ class SetNameForm extends React.Component {
             />
             <button name="enterBtn">Enter</button>
           </form>
+          {this.props.error && <div className="error">{this.props.error}</div>}
         </div>
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  error: state.user.nameFormError
+});
+
 const mapDispatchToProps = dispatch => ({
   setUserName: name => dispatch(setUserName(name))
 });
 
-export default connect(undefined, mapDispatchToProps)(SetNameForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SetNameForm);

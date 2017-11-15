@@ -20,7 +20,7 @@ class App extends Component {
 
   render() {
     let renderEl = <SetNameForm {...this.props} />;
-    if (this.props.user.username) {
+    if (this.props.username) {
       renderEl = (
         <div className="chat">
           <ChatList handleSelectUser={this.handleSelectUser} />
@@ -37,7 +37,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
+  username: state.user.username,
   chatWith: state.chat.chatWith
 });
 
