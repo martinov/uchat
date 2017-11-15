@@ -2,6 +2,7 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import MessageItem from './MessageItem';
+import selectMessages from '../selectors/messages';
 
 class MessageList extends React.Component {
   render() {
@@ -42,7 +43,7 @@ class MessageList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  messages: state.chat.messages
+  messages: selectMessages(state.chat, state.user.uid)
 });
 
 export default connect(mapStateToProps)(MessageList);

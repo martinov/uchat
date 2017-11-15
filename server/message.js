@@ -1,7 +1,8 @@
 const uuid = require('uuid');
 
-let generateMessage = (from, to, text) => ({
+let generateMessage = (uid, from, to, text) => ({
   id: uuid(),
+  uid,
   from,
   to,
   text,

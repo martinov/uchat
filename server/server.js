@@ -34,7 +34,7 @@ io.on('connection', socket => {
   });
 
   socket.on('createMessage', ({ from, to: sendToSocketId, text }, cb) => {
-    const newMsg = generateMessage(from, sendToSocketId, text);
+    const newMsg = generateMessage(socketId, from, sendToSocketId, text);
     if (sendToSocketId === 'mainChat') {
       socket.broadcast.emit('newMessage', newMsg);
     } else if (!!userList[sendToSocketId]) {
