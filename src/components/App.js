@@ -13,17 +13,12 @@ class App extends Component {
     this.props.socket.emit('isTyping', isTyping);
   };
 
-  handleSelectUser = e => {
-    let userId = e.target.dataset.userId;
-    this.setState(() => ({ chatWith: userId }));
-  };
-
   render() {
     let renderEl = <SetNameForm {...this.props} />;
     if (this.props.username) {
       renderEl = (
         <div className="chat">
-          <ChatList handleSelectUser={this.handleSelectUser} />
+          <ChatList />
 
           <div className="chat__main">
             <MessageList />
@@ -37,12 +32,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  username: state.user.username,
-  chatWith: state.chat.chatWith
+  username: state.user.username
 });
 
-const mapDispatchToProps = dispatch => ({
-  // addMessage: msg => dispatch(addMessage(msg))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

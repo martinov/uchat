@@ -10,9 +10,7 @@ import './index.css';
 
 const socket = io();
 const store = configureStore({ socket });
-store.subscribe(() => {
-  console.log(store.getState());
-});
+// store.subscribe(() => console.log(store.getState()));
 
 const appJsx = (
   <Provider store={store}>

@@ -1,7 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { setChatWith } from '../actions/chat';
 
 class ChatList extends React.Component {
+  handleChatListOnClick = e => {
+    const userId = e.target.dataset.userId;
+    this.props.setChatWith(userId);
+  };
   render() {
     let peopleList = [];
     for (let key in this.props.userList) {
@@ -18,7 +23,7 @@ class ChatList extends React.Component {
         <h2
           className={h2class}
           data-user-id="mainChat"
-          onClick={this.props.handleSelectUser}
+          onClick={h2class ? null : this.handleChatListOnClick}
         >
           uChat
         </h2>
@@ -33,7 +38,7 @@ class ChatList extends React.Component {
               <li
                 key={p.id}
                 onClick={
-                  p.id !== this.props.uid ? this.props.handleSelectUser : null
+                  p.id !== this.props.uid ? this.handleChatListOnClick : null
                 }
                 className={liClasses}
                 data-user-id={p.id}
@@ -55,4 +60,8 @@ const mapStateToProps = state => ({
   chatWith: state.chat.chatWith
 });
 
-export default connect(mapStateToProps)(ChatList);
+const mapDispatchToProps = dispatch => ({
+  setChatWith: chatWith => dispatch(setChatWith(chatWith))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
