@@ -1,26 +1,23 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import './index.css';
+import io from 'socket.io-client';
+import configureStore from './store';
 import App from './components/App';
 //import registerServiceWorker from './registerServiceWorker';
-import configureStore from './store';
-import { setUserId, setUserName } from './actions/user';
 
-const store = configureStore();
-console.log(store.getState());
+import './index.css';
 
+const socket = io();
+const store = configureStore({ socket });
 store.subscribe(() => {
   console.log(store.getState());
 });
 
-store.dispatch(setUserId('123'));
-store.dispatch(setUserName('Martin'));
-
-const jsx = (
+const appJsx = (
   <Provider store={store}>
-    <App />
+    <App socket={socket} />
   </Provider>
 );
-ReactDOM.render(jsx, document.getElementById('root'));
+render(appJsx, document.getElementById('root'));
 // registerServiceWorker();

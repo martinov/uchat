@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createMessage } from '../actions/chat';
 
 class MessageForm extends React.Component {
   constructor(props) {
@@ -60,4 +62,8 @@ class MessageForm extends React.Component {
   }
 }
 
-export default MessageForm;
+const mapDispatchToProps = dispatch => ({
+  handleAddMessage: message => dispatch(createMessage(message))
+});
+
+export default connect(undefined, mapDispatchToProps)(MessageForm);

@@ -1,68 +1,16 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
+import { connect } from 'react-redux';
 import SetNameForm from './SetNameForm';
 import ChatList from './ChatList';
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
+
 import './App.css';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.socket = io();
-
-    this.state = {
-      uid: '',
-      username: '',
-      userList: [],
-      messages: [],
-      chatWith: 'mainChat'
-    };
-  }
-
-  componentDidMount() {
-    this.socket.on('uid', uid => {
-      this.setState(() => ({ uid }));
-    });
-    //this.socket.on('enterUser', console.log);
-    this.socket.on('updateUserList', userList => {
-      this.setState(() => ({
-        userList
-      }));
-    });
-    this.socket.on('newMessage', m => {
-      this.setState(prevState => ({
-        messages: [...prevState.messages, m]
-      }));
-    });
-    this.socket.on('userIsTyping', u => {
-      this.setState(prevState => {
-        let { userList } = prevState;
-        userList[u.socketId].isTyping = u.isTyping;
-        return {
-          userList
-        };
-      });
-    });
-  }
-
-  handleAddMessage = newMsg => {
-    this.socket.emit('createMessage', {
-      from: this.state.username,
-      to: this.state.chatWith,
-      text: newMsg
-    });
-  };
-
-  handleSetUsername = username => {
-    this.setState(() => ({ username }));
-    this.socket.emit('enter', { username });
-  };
-
   handleIsTyping = isTyping => {
     this.setState(() => ({ isTyping }));
-    this.socket.emit('isTyping', isTyping);
+    this.props.socket.emit('isTyping', isTyping);
   };
 
   handleSelectUser = e => {
@@ -71,25 +19,15 @@ class App extends Component {
   };
 
   render() {
-    let renderEl = (
-      <SetNameForm {...this.props} handleSetUsername={this.handleSetUsername} />
-    );
-    if (this.state.username) {
+    let renderEl = <SetNameForm {...this.props} />;
+    if (this.props.user.username) {
       renderEl = (
         <div className="chat">
-          <ChatList
-            uid={this.state.uid}
-            userList={this.state.userList}
-            chatWith={this.state.chatWith}
-            handleSelectUser={this.handleSelectUser}
-          />
+          <ChatList handleSelectUser={this.handleSelectUser} />
 
           <div className="chat__main">
-            <MessageList messages={this.state.messages} />
-            <MessageForm
-              handleAddMessage={this.handleAddMessage}
-              handleIsTyping={this.handleIsTyping}
-            />
+            <MessageList />
+            <MessageForm handleIsTyping={this.handleIsTyping} />
           </div>
         </div>
       );
@@ -98,4 +36,13 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  user: state.user,
+  chatWith: state.chat.chatWith
+});
+
+const mapDispatchToProps = dispatch => ({
+  // addMessage: msg => dispatch(addMessage(msg))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class ChatList extends React.Component {
   render() {
@@ -23,27 +24,35 @@ class ChatList extends React.Component {
         </h2>
         <h3>People</h3>
         <ul id="users">
-        {
-          peopleList.map(p => {
+          {peopleList.map(p => {
             let liClasses = '';
             if (p.isTyping) liClasses = 'is-typing';
             if (p.chatWith) liClasses += ' active';
             if (p.id === this.props.uid) liClasses += ' me';
             return (
-              <li key={p.id}
-                onClick={p.id !== this.props.uid ? this.props.handleSelectUser : null}
+              <li
+                key={p.id}
+                onClick={
+                  p.id !== this.props.uid ? this.props.handleSelectUser : null
+                }
                 className={liClasses}
                 data-user-id={p.id}
               >
-                {p.username}{p.isTyping && (<span> ...</span>)}
+                {p.username}
+                {p.isTyping && <span> ...</span>}
               </li>
             );
-          })
-        }
+          })}
         </ul>
       </div>
     );
   }
 }
 
-export default ChatList;
+const mapStateToProps = state => ({
+  uid: state.user.uid,
+  userList: state.user.userList,
+  chatWith: state.chat.chatWith
+});
+
+export default connect(mapStateToProps)(ChatList);

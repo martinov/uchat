@@ -11,11 +11,6 @@ let io = socketIO(server);
 const publicPath = path.join(__dirname, '../build');
 app.use(express.static(publicPath));
 
-// app.get('/api', function (req, res) {
-//   res.set('Content-Type', 'application/json');
-//   res.send('{"message":"Hello from API!"}');
-// });
-
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {
   response.sendFile(path.resolve(publicPath, 'index.html'));
@@ -26,11 +21,12 @@ let userList = {};
 io.on('connection', socket => {
   let socketId = socket.id;
 
-  socket.on('enter', info => {
+  socket.on('enter', (info, cb) => {
     userList[socketId] = info;
-    socket.emit('uid', socketId);
-    socket.broadcast.emit('enterUser', userList[socketId].username);
+    // socket.broadcast.emit('enterUser', userList[socketId]);
     io.emit('updateUserList', userList);
+    socket.emit('uid', socketId);
+    // cb({ uid: socketId });
     /*
     socket.emit(
       'newMessage',
@@ -43,14 +39,14 @@ io.on('connection', socket => {
     */
   });
 
-  socket.on('createMessage', ({ from, to: sendToSocketId, text }) => {
+  socket.on('createMessage', ({ from, to: sendToSocketId, text }, cb) => {
+    const newMsg = generateMessage(from, sendToSocketId, text);
     if (sendToSocketId === 'mainChat') {
-      io.emit('newMessage', generateMessage(from, sendToSocketId, text));
+      socket.broadcast.emit('newMessage', newMsg);
     } else if (!!userList[sendToSocketId]) {
-      io
-        .to(sendToSocketId)
-        .emit('newMessage', generateMessage(from, sendToSocketId, text));
+      io.to(sendToSocketId).emit('newMessage', newMsg);
     }
+    cb(newMsg);
   });
 
   socket.on('disconnect', () => {

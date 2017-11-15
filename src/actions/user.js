@@ -1,2 +1,13 @@
-export const setUserId = uid => ({ type: 'SET_USER_ID', uid });
-export const setUserName = name => ({ type: 'SET_USER_NAME', name });
+export const setUserInfo = user => ({ type: 'SET_USER_INFO', user });
+
+export const setUserName = username => {
+  return (dispatch, getState, { socket }) => {
+    // socket.emit('enter', { username }, uid => {
+    //   dispatch(setUserInfo({ uid, username }));
+    // });
+    socket.emit('enter', { username });
+    dispatch(setUserInfo({ username }));
+  };
+};
+
+export const setUserList = userList => ({ type: 'SET_USER_LIST', userList });

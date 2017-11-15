@@ -1,44 +1,40 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import userReducer from './reducers/user';
-// import userListReducer from './reducers/user';
-// import messagesReducer from './reducers/messages';
-// import filtersReducer from './reducers/filters';
+import chatReducer from './reducers/chat';
+import { setUserInfo, setUserList } from './actions/user';
+import { addMessage } from './actions/chat';
 
-export default () => {
+export default (extraArgs = {}) => {
+  const socket = extraArgs.socket;
+
   const store = createStore(
     combineReducers({
-      user: userReducer
-      // userList: userListReducer,
-      // messages: messagesReducer,
-      // filters: filtersReducer
-    })
+      user: userReducer,
+      chat: chatReducer
+    }),
+    applyMiddleware(thunk.withExtraArgument({ socket }))
   );
 
-  return store;
-};
+  socket.on('uid', uid => {
+    store.dispatch(setUserInfo({ uid }));
+  });
+  //socket.on('enterUser', console.log);
+  socket.on('updateUserList', userList => {
+    store.dispatch(setUserList(userList));
+  });
+  socket.on('newMessage', m => {
+    store.dispatch(addMessage(m));
+  });
+  // socket.on('userIsTyping', u => {
+  //   this.setState(prevState => {
+  //     let { userList } = prevState;
+  //     userList[u.socketId].isTyping = u.isTyping;
+  //     return {
+  //       userList
+  //     };
+  //   });
+  // });
 
-// eslint-disable-next-line
-const demoState = {
-  user: {
-    uid: '{...socket.id...}',
-    userName: 'Martin'
-  },
-  userList: [
-    {
-      uid: '{...socket.id...}',
-      userName: 'Person Name'
-    }
-  ],
-  messages: [
-    {
-      id: '{...uuid...}',
-      to: '{...uid...}',
-      from: 'Martin',
-      text: 'Hello World!',
-      createdAt: 1234567890
-    }
-  ],
-  filters: {
-    msgFrom: '{...uid...}'
-  }
+  return store;
 };

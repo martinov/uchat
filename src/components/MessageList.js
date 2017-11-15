@@ -1,14 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
+import { connect } from 'react-redux';
 import MessageItem from './MessageItem';
 
 class MessageList extends React.Component {
   render() {
     return (
       <ol id="messages" className="chat__messages" ref="messageList">
-        {this.props.messages.map(m => (
-          <MessageItem key={m.createdAt} msg={m} />
-        ))}
+        {this.props.messages.map(m => <MessageItem key={m.id} msg={m} />)}
       </ol>
     );
   }
@@ -37,9 +36,13 @@ class MessageList extends React.Component {
       clientHeight + scrollTop + newMessageHeight + lastMessageHeight >=
       scrollHeight
     ) {
-      ReactDOM.findDOMNode(messageList).scrollTop = scrollHeight;
+      findDOMNode(messageList).scrollTop = scrollHeight;
     }
   }
 }
 
-export default MessageList;
+const mapStateToProps = state => ({
+  messages: state.chat.messages
+});
+
+export default connect(mapStateToProps)(MessageList);

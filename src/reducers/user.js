@@ -1,18 +1,22 @@
 // User Reducer
 
-const userReducerDefaultState = { name: '', uid: '' };
+const userReducerDefaultState = {
+  uid: '',
+  username: '',
+  userList: []
+};
 
 export default (state = userReducerDefaultState, action) => {
   switch (action.type) {
-    case 'SET_USER_ID':
+    case 'SET_USER_INFO':
       return {
         ...state,
-        uid: action.uid
+        ...action.user
       };
-    case 'SET_USER_NAME':
+    case 'SET_USER_LIST':
       return {
         ...state,
-        name: action.name
+        userList: action.userList
       };
     default:
       return state;
