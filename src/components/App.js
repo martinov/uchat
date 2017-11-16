@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import SetNameForm from './SetNameForm';
 import ChatList from './ChatList';
@@ -7,7 +7,7 @@ import MessageForm from './MessageForm';
 
 import './App.css';
 
-class App extends Component {
+class App extends React.Component {
   handleIsTyping = isTyping => {
     this.setState(() => ({ isTyping }));
     this.props.socket.emit('isTyping', isTyping);

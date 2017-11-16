@@ -22,8 +22,10 @@ io.on('connection', socket => {
   let socketId = socket.id;
 
   socket.on('enter', (info, cb) => {
-    if (Object.keys(userList).find(
-      (key, index) => userList[key].username === info.username)
+    if (
+      Object.keys(userList).find(
+        (key, index) => userList[key].username === info.username
+      )
     ) {
       return cb({ error: 'Sorry but this name is already in use!' });
     }

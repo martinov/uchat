@@ -1,12 +1,12 @@
 export const setChatWith = chatWith => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: 'SET_CHATWITH', chatWith });
     dispatch(clearNewMsgFrom(chatWith));
   };
 };
 
 export const addMessage = msg => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: 'ADD_MESSAGE', msg });
     dispatch(addNewMsgFrom(msg.uid));
   };
@@ -27,4 +27,7 @@ export const createMessage = msg => {
 };
 
 export const addNewMsgFrom = chatWith => ({ type: 'NEW_MSG_FROM', chatWith });
-export const clearNewMsgFrom = chatWith => ({ type: 'CLEAR_NEW_MSG', chatWith });
+export const clearNewMsgFrom = chatWith => ({
+  type: 'CLEAR_NEW_MSG',
+  chatWith
+});
