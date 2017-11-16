@@ -21,24 +21,3 @@ h1 {
 strong {
   font-weight: bold;
 }
-
-.login-container {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.login-container .login-form {
-  width: 300px;
-  text-align: center;
-  padding: 2vh 0;
-}
-.login-container .login-form .login-form-field {
-  display: flex;
-  justify-content: space-around;
-  margin: 10px 0;
-}
-.login-container .login-form .login-form-field input {
-  padding: 2px 5px;
-}

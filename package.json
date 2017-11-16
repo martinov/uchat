@@ -7,6 +7,7 @@
   "author": "Martin Martinov <@mmartinov>",
   "license": "MIT",
   "dependencies": {
+    "classnames": "^2.2.5",
     "express": "^4.16.2",
     "moment": "^2.19.1",
     "react": "^16.0.0",

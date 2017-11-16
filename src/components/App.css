@@ -168,10 +168,8 @@ button:disabled {
   background-color: #6bcdd4;
 }
 .chat__sidebar li.new-msg {
+  color: magenta;
   font-style: oblique;
-}
-.chat__sidebar li.new-msg:after {
-  content: ' *';
 }
 .chat__main {
   display: flex;

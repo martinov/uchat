@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setUserName } from '../actions/user';
 
+import './SetNameForm.css';
+
 class SetNameForm extends React.Component {
   handleSetName = e => {
     e.preventDefault();

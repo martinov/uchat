@@ -1,31 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { setChatWith } from '../actions/chat';
+import ChatListItem from './ChatListItem';
 
 class ChatList extends React.Component {
   handleChatListOnClick = e => {
     const userId = e.target.dataset.userId;
     this.props.setChatWith(userId);
   };
+
   render() {
-    let peopleList = [];
+    let userList = [];
     for (let key in this.props.userList) {
-      peopleList.push({
-        id: key,
+      userList.push({
+        uid: key,
         username: this.props.userList[key].username,
         isTyping: this.props.userList[key].isTyping,
         chatWith: this.props.chatWith === key,
         newMsg: this.props.newMsgFrom.indexOf(key) >= 0
       });
     }
-    let h2class = this.props.chatWith === 'mainChat' ? 'active' : null;
-    if (this.props.newMsgFrom.indexOf('mainChat') >= 0) {
-      h2class += ' new-msg';
-    }
+    const h2Class = classNames({
+      'active': this.props.chatWith === 'mainChat'
+    });
+
     return (
       <div className="chat__sidebar">
         <h2
-          className={h2class}
+          className={h2Class}
           data-user-id="mainChat"
           onClick={
             this.props.chatWith !== 'mainChat'
@@ -37,26 +40,13 @@ class ChatList extends React.Component {
         </h2>
         <h3>People</h3>
         <ul id="users">
-          {peopleList.map(p => {
-            let liClasses = '';
-            if (p.isTyping) liClasses = 'is-typing';
-            if (p.chatWith) liClasses += ' active';
-            if (p.newMsg) liClasses += ' new-msg';
-            if (p.id === this.props.uid) liClasses += ' me';
-            return (
-              <li
-                key={p.id}
-                onClick={
-                  p.id !== this.props.uid ? this.handleChatListOnClick : null
-                }
-                className={liClasses}
-                data-user-id={p.id}
-              >
-                {p.username}
-                {p.isTyping && <span> ...</span>}
-              </li>
-            );
-          })}
+          {userList.map(u => (
+            <ChatListItem
+              key={u.uid}
+              user={u}
+              handleChatListOnClick={this.handleChatListOnClick}
+            />
+          ))}
         </ul>
       </div>
     );
