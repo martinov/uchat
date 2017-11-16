@@ -1,15 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createMessage } from '../actions/chat';
+import { setIsTyping } from '../actions/user';
 
 class MessageForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.timeoutHandle = undefined;
-    this.state = {
-      isTyping: false
-    };
   }
 
   handleMsgSubmit = e => {
@@ -25,7 +23,6 @@ class MessageForm extends React.Component {
 
   typingTimeout = () => {
     // Timeout reached - maybe the user isn't typing anymore.
-    this.setState(() => ({ isTyping: false }));
     this.props.handleIsTyping(false);
   };
 
@@ -34,8 +31,7 @@ class MessageForm extends React.Component {
       clearTimeout(this.timeoutHandle);
       return;
     }
-    if (this.state.isTyping === false) {
-      this.setState(() => ({ isTyping: true }));
+    if (this.props.isTyping === false) {
       this.props.handleIsTyping(true);
     } else {
       clearTimeout(this.timeoutHandle);
@@ -62,8 +58,13 @@ class MessageForm extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  isTyping: state.user.isTyping
+})
+
 const mapDispatchToProps = dispatch => ({
-  handleAddMessage: message => dispatch(createMessage(message))
+  handleAddMessage: message => dispatch(createMessage(message)),
+  handleIsTyping: isTyping => dispatch(setIsTyping(isTyping))
 });
 
-export default connect(undefined, mapDispatchToProps)(MessageForm);
+export default connect(mapStateToProps, mapDispatchToProps)(MessageForm);

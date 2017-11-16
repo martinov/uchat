@@ -1,5 +1,8 @@
 // Get visible messages
 
+// messages - all messages sent to current user
+// chatWith - partner (or mainChat) selected by current user
+// uid      - current user socket id
 export default ({ messages, chatWith }, uid) => {
   return messages.filter((msg) => {
     if (chatWith === 'mainChat' && msg.to === 'mainChat') {

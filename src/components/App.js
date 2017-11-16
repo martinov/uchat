@@ -8,11 +8,6 @@ import MessageForm from './MessageForm';
 import './App.css';
 
 class App extends React.Component {
-  handleIsTyping = isTyping => {
-    this.setState(() => ({ isTyping }));
-    this.props.socket.emit('isTyping', isTyping);
-  };
-
   render() {
     let renderEl = <SetNameForm {...this.props} />;
     if (this.props.username) {
@@ -22,7 +17,7 @@ class App extends React.Component {
 
           <div className="chat__main">
             <MessageList />
-            <MessageForm handleIsTyping={this.handleIsTyping} />
+            <MessageForm />
           </div>
         </div>
       );

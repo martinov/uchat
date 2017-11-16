@@ -10,11 +10,10 @@ import './index.css';
 
 const socket = io();
 const store = configureStore({ socket });
-// store.subscribe(() => console.log(store.getState()));
 
 const appJsx = (
   <Provider store={store}>
-    <App socket={socket} />
+    <App />
   </Provider>
 );
 render(appJsx, document.getElementById('root'));

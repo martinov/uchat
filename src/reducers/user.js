@@ -3,8 +3,9 @@
 const userReducerDefaultState = {
   uid: '',
   username: '',
-  userList: [],
-  nameFormError: ''
+  userList: {},
+  nameFormError: '',
+  isTyping: false
 };
 
 export default (state = userReducerDefaultState, action) => {
@@ -23,6 +24,23 @@ export default (state = userReducerDefaultState, action) => {
       return {
         ...state,
         nameFormError: action.error
+      };
+    case 'SET_USER_IS_TYPING':
+      let updatedUserList = {};
+      for (let uid in state.userList) {
+        updatedUserList[uid] = state.userList[uid];
+        if (uid === action.user.uid) {
+          updatedUserList[uid].isTyping = action.user.isTyping;
+        }
+      }
+      return {
+        ...state,
+        userList: updatedUserList
+      };
+    case 'SET_IS_TYPING':
+      return {
+        ...state,
+        isTyping: action.isTyping
       };
     default:
       return state;

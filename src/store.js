@@ -1,9 +1,11 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import userReducer from './reducers/user';
 import chatReducer from './reducers/chat';
-import { setUserList } from './actions/user';
+import { setUserList, setUserIsTyping } from './actions/user';
 import { addMessage } from './actions/chat';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default (extraArgs = {}) => {
   const socket = extraArgs.socket;
@@ -13,7 +15,9 @@ export default (extraArgs = {}) => {
       user: userReducer,
       chat: chatReducer
     }),
-    applyMiddleware(thunk.withExtraArgument({ socket }))
+    composeEnhancers(
+      applyMiddleware(thunk.withExtraArgument({ socket }))
+    )
   );
 
   // socket.on('enterUser', console.log);
@@ -23,15 +27,12 @@ export default (extraArgs = {}) => {
   socket.on('newMessage', m => {
     store.dispatch(addMessage(m));
   });
-  // socket.on('userIsTyping', u => {
-  //   this.setState(prevState => {
-  //     let { userList } = prevState;
-  //     userList[u.socketId].isTyping = u.isTyping;
-  //     return {
-  //       userList
-  //     };
-  //   });
-  // });
+  socket.on('userIsTyping', user => {
+    store.dispatch(setUserIsTyping({
+      uid: user.socketId,
+      isTyping: user.isTyping})
+    );
+  });
 
   return store;
 };
