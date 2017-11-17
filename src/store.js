@@ -15,9 +15,7 @@ export default (extraArgs = {}) => {
       user: userReducer,
       chat: chatReducer
     }),
-    composeEnhancers(
-      applyMiddleware(thunk.withExtraArgument({ socket }))
-    )
+    composeEnhancers(applyMiddleware(thunk.withExtraArgument({ socket })))
   );
 
   // socket.on('enterUser', console.log);
@@ -28,9 +26,11 @@ export default (extraArgs = {}) => {
     store.dispatch(addMessage(m));
   });
   socket.on('userIsTyping', user => {
-    store.dispatch(setUserIsTyping({
-      uid: user.socketId,
-      isTyping: user.isTyping})
+    store.dispatch(
+      setUserIsTyping({
+        uid: user.socketId,
+        isTyping: user.isTyping
+      })
     );
   });
 

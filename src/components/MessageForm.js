@@ -60,7 +60,7 @@ class MessageForm extends React.Component {
 
 const mapStateToProps = state => ({
   isTyping: state.user.isTyping
-})
+});
 
 const mapDispatchToProps = dispatch => ({
   handleAddMessage: message => dispatch(createMessage(message)),

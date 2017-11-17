@@ -22,7 +22,7 @@ class ChatList extends React.Component {
       });
     }
     const h2Class = classNames({
-      'active': this.props.chatWith === 'mainChat'
+      active: this.props.chatWith === 'mainChat'
     });
 
     return (

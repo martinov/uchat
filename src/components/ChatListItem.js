@@ -5,12 +5,11 @@ import classNames from 'classnames';
 class ChatListItem extends React.Component {
   render() {
     const user = this.props.user;
-    console.log(user);
     const liClass = classNames({
-      'active': user.chatWith,
+      active: user.chatWith,
       'is-typing': user.isTyping,
       'new-msg': user.newMsg,
-      'me': user.uid === this.props.uid
+      me: user.uid === this.props.uid
     });
 
     return (
