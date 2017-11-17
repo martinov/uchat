@@ -53,11 +53,17 @@ io.on('connection', socket => {
     socket.broadcast.emit('updateUserList', userList);
   });
 
-  socket.on('isTyping', isTyping => {
-    socket.broadcast.emit('userIsTyping', {
+  socket.on('isTyping', ({ isTyping, chatWith }) => {
+    const payload = {
       socketId,
+      chatWith,
       isTyping
-    });
+    };
+    if (chatWith === 'mainChat') {
+      socket.broadcast.emit('userIsTyping', payload);
+    } else if (!!userList[chatWith]) {
+      io.to(chatWith).emit('userIsTyping', payload);
+    }
   });
 });
 

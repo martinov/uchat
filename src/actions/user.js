@@ -28,7 +28,8 @@ export const setNameFormError = error => ({
 
 export const setIsTyping = isTyping => {
   return (dispatch, getState, { socket }) => {
-    socket.emit('isTyping', isTyping);
+    const { chatWith } = getState().chat;
+    socket.emit('isTyping', { isTyping, chatWith });
     dispatch({ type: 'SET_IS_TYPING', isTyping });
   };
 };
