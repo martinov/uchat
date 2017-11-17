@@ -6,9 +6,15 @@ export const setChatWith = chatWith => {
 };
 
 export const addMessage = msg => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
+
     dispatch({ type: 'ADD_MESSAGE', msg });
-    if (msg.to !== 'mainChat') {
+    if (
+      msg.to !== 'mainChat' &&
+      msg.uid !== state.user.uid &&
+      msg.uid !== state.chat.chatWith
+    ) {
       dispatch(addNewMsgFrom(msg.uid));
     }
   };

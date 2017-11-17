@@ -19,21 +19,18 @@ export default (state = chatReducerDefaultState, action) => {
         messages: [...state.messages, action.msg]
       };
     case 'NEW_MSG_FROM':
-      let computedNewMsgFrom = state.newMsgFrom;
-      if (computedNewMsgFrom.indexOf(action.chatWith) < 0) {
-        computedNewMsgFrom.push(action.chatWith);
+      let newMsgFrom = state.newMsgFrom;
+      if (newMsgFrom.indexOf(action.chatWith) < 0) {
+        newMsgFrom.push(action.chatWith);
       }
       return {
         ...state,
-        newMsgFrom: computedNewMsgFrom
+        newMsgFrom
       };
     case 'CLEAR_NEW_MSG':
-      let newStateMsgFrom = state.newMsgFrom;
-      const rmIndex = newStateMsgFrom.indexOf(action.chatWith);
-      newStateMsgFrom.splice(rmIndex, 1);
       return {
         ...state,
-        newMsgFrom: newStateMsgFrom
+        newMsgFrom: state.newMsgFrom.filter(from => from !== action.chatWith)
       };
     default:
       return state;
