@@ -19,7 +19,7 @@ export default (state = chatReducerDefaultState, action) => {
         messages: [...state.messages, action.msg]
       };
     case 'NEW_MSG_FROM':
-      let newMsgFrom = state.newMsgFrom;
+      let newMsgFrom = [...state.newMsgFrom];
       if (newMsgFrom.indexOf(action.chatWith) < 0) {
         newMsgFrom.push(action.chatWith);
       }
