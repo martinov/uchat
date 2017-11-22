@@ -1,6 +1,7 @@
 // Chat Reducer
 
 const chatReducerDefaultState = {
+  userList: {},
   chatWith: 'mainChat',
   messages: [],
   newMsgFrom: []
@@ -8,6 +9,11 @@ const chatReducerDefaultState = {
 
 export default (state = chatReducerDefaultState, action) => {
   switch (action.type) {
+    case 'SET_USER_LIST':
+      return {
+        ...state,
+        userList: action.userList
+      };
     case 'SET_CHATWITH':
       return {
         ...state,
@@ -31,6 +37,18 @@ export default (state = chatReducerDefaultState, action) => {
       return {
         ...state,
         newMsgFrom: state.newMsgFrom.filter(from => from !== action.chatWith)
+      };
+    case 'SET_USER_IS_TYPING':
+      let updatedUserList = {};
+      for (let uid in state.userList) {
+        updatedUserList[uid] = state.userList[uid];
+        if (uid === action.user.uid) {
+          updatedUserList[uid].isTyping = action.user.isTyping;
+        }
+      }
+      return {
+        ...state,
+        userList: updatedUserList
       };
     default:
       return state;

@@ -1,3 +1,8 @@
+export const setUserList = userList => ({
+  type: 'SET_USER_LIST',
+  userList
+});
+
 export const setChatWith = chatWith => {
   return dispatch => {
     dispatch({ type: 'SET_CHATWITH', chatWith });
@@ -42,4 +47,9 @@ export const addNewMsgFrom = chatWith => ({
 export const clearNewMsgFrom = chatWith => ({
   type: 'CLEAR_NEW_MSG',
   chatWith
+});
+
+export const setUserIsTyping = user => ({
+  type: 'SET_USER_IS_TYPING',
+  user
 });

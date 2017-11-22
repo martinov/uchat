@@ -2,8 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import userReducer from './reducers/user';
 import chatReducer from './reducers/chat';
-import { setUserList, setUserIsTyping } from './actions/user';
-import { addMessage } from './actions/chat';
+import { setUserList, setUserIsTyping, addMessage } from './actions/chat';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

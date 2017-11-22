@@ -16,11 +16,6 @@ export const setUserName = username => {
   };
 };
 
-export const setUserList = userList => ({
-  type: 'SET_USER_LIST',
-  userList
-});
-
 export const setNameFormError = error => ({
   type: 'SET_NAME_FORM_ERROR',
   error
@@ -33,8 +28,3 @@ export const setIsTyping = isTyping => {
     dispatch({ type: 'SET_IS_TYPING', isTyping });
   };
 };
-
-export const setUserIsTyping = user => ({
-  type: 'SET_USER_IS_TYPING',
-  user
-});

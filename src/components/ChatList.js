@@ -55,7 +55,7 @@ class ChatList extends React.Component {
 
 const mapStateToProps = state => ({
   uid: state.user.uid,
-  userList: state.user.userList,
+  userList: state.chat.userList,
   chatWith: state.chat.chatWith,
   newMsgFrom: state.chat.newMsgFrom
 });
